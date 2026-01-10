@@ -1,16 +1,13 @@
-// netlify/functions/chat.js
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
+// functions/chat.js (Cloudflare Pages Functions)
+export async function onRequestPost({ request }) {
   let keyword = '', step = '_start', answer = '', context = {};
   try {
-    const body = JSON.parse(event.body || '{}');
+    const body = await request.json();
     keyword = String(body.keyword || '').trim();
-    step    = String(body.step    || '_start').trim();
-    answer  = String(body.answer  || '').trim();
+    step    = String(body.step || '_start').trim();
+    answer  = String(body.answer || '').trim();
     context = body.context && typeof body.context === 'object' ? body.context : {};
-  } catch(_) {}
+  } catch (_) {}
 
   const flows = getFlows();
   const flow = flows[keyword];
@@ -43,18 +40,29 @@ exports.handler = async (event) => {
   return json({
     ok:true, role: next?.role || 'hello', prompt: promptText, next: nextKey, context
   });
-};
+}
+
+export async function onRequest({ request }) {
+  // POST以外は405
+  if (request.method !== 'POST') {
+    return new Response('Method Not Allowed', { status: 405 });
+  }
+  return onRequestPost({ request });
+}
 
 function reply(prompt, role='hello', next='_start', extra={}) {
   return Object.assign({ ok:true, role, prompt, next }, extra);
 }
 function json(obj, code=200){
-  return {
-    statusCode: code,
-    headers:{ 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' },
-    body: JSON.stringify(obj)
-  };
+  return new Response(JSON.stringify(obj), {
+    status: code,
+    headers: {
+      'Content-Type':'application/json; charset=utf-8',
+      'Cache-Control':'no-store'
+    }
+  });
 }
+
 
 /* ==== フロー定義 ==== */
 function baseMap(){

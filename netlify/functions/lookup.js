@@ -1,4 +1,4 @@
-// netlify/functions/lookup.js
+// functions/lookup.js (Cloudflare Pages Functions)
 
 // ▼ キーワード → PDF 情報のマップ（サーバ側のみ）
 //   このファイルは Netlify Functions としてサーバ側だけに置かれるので、
@@ -60,7 +60,8 @@ const PDF_MAP = {
   }
 };
 
-// 入力正規化（前後の空白カット・全角英数→半角・連続スペース整理）
+
+
 function norm(s) {
   return s?.toString()
     .trim()
@@ -69,7 +70,6 @@ function norm(s) {
     .replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xfee0));
 }
 
-// CORS & セキュリティ系ヘッダ
 function baseHeaders(origin) {
   return {
     "Access-Control-Allow-Origin": origin || "*",
@@ -79,70 +79,39 @@ function baseHeaders(origin) {
   };
 }
 
-export const handler = async (event) => {
-  const headers = baseHeaders(event.headers.origin);
+export async function onRequest({ request }) {
+  const origin = request.headers.get("Origin");
+  const headers = baseHeaders(origin);
 
-  // CORS プリフライト
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
+  if (request.method === "OPTIONS") {
+    return new Response("", { status: 200, headers });
   }
-
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ ok: false })
-    };
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ ok:false }), { status: 405, headers });
   }
 
   try {
-    const { keyword } = JSON.parse(event.body || "{}");
+    const { keyword } = await request.json();
     const q = norm(keyword);
-    if (!q) {
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ ok: false })
-      };
-    }
+    if (!q) return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
 
-    // キー完全一致 or aliases 完全一致を探す
     let hit = null;
-
     for (const [key, value] of Object.entries(PDF_MAP)) {
-      if (norm(key) === q) {
-        hit = value;
-        break;
-      }
+      if (norm(key) === q) { hit = value; break; }
       const aliases = Array.isArray(value.aliases) ? value.aliases : [];
-      if (aliases.some(a => norm(a) === q)) {
-        hit = value;
-        break;
-      }
+      if (aliases.some(a => norm(a) === q)) { hit = value; break; }
     }
 
     if (!hit || !hit.url) {
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ ok: false })
-      };
+      return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
     }
 
-    return {
-      statusCode: 200,
-      headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ok: true,
-        data: { title: hit.title, url: hit.url }
-      })
-    };
+    return new Response(JSON.stringify({ ok:true, data:{ title: hit.title, url: hit.url } }), {
+      status: 200,
+      headers: { ...headers, "Content-Type": "application/json" }
+    });
   } catch (e) {
-    console.error("lookup error:", e);
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ ok: false })
-    };
+    return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
   }
-};
+}
+
