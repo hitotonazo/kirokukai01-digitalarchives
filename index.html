@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>奇録会【霧籠村祭事報告書】デジタルアーカイブ</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <!-- UI フラグ（用途不明） -->
+  <div id="ux-flag" class="ux-flag" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <h1>奇録会【霧籠村祭事報告書】デジタルアーカイブ</h1>
+  </header>
+
+  <main class="container">
+    <section class="search-card" role="search" aria-label="資料検索">
+      <form id="searchForm" autocomplete="off">
+        <label for="keyword" class="label">キーワード</label>
+        <div class="input-row">
+          <input
+            id="keyword"
+            name="keyword"
+            type="text"
+            class="input"
+            placeholder="キーワードを入力"
+            inputmode="text"
+            autocomplete="off"
+          />
+          <button id="submitBtn" class="btn" type="submit">検索</button>
+        </div>
+        <p id="status" class="hint" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- 外見上わからない隠しリンク -->
+    <div class="hidden-url">
+      <a
+        id="entry-node"
+        href="https://report77-navi.com/index.html?n=1"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        https://report77-navi.com/index.html?n=1
+      </a>
+    </div>
+
+    <section id="results" class="results" aria-live="polite" aria-busy="false"></section>
+  </main>
+
+  <footer class="site-footer">
+    <small>&copy; 人と謎 / Hito to Nazo</small>
+    <p class="disclaimer">
+      ※このWebサイトの内容はフィクションであり、実在の人物・団体とは一切関係がありません。
+    </p>
+  </footer>
+
+  <script src="/ui-hint.js"></script>
+  <script defer src="/app.js"></script>
+</body>
+</html>
