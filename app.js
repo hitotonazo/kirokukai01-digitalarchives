@@ -70,7 +70,7 @@ form.addEventListener("submit", async (e) => {
   if (statusEl) statusEl.textContent = "検索中…";
 
   try {
-    const resp = await fetch("/.netlify/functions/lookup", {
+    const resp = await fetch("/lookup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ keyword })
