@@ -79,39 +79,61 @@ function baseHeaders(origin) {
   };
 }
 
-export async function onRequest({ request }) {
-  const origin = request.headers.get("Origin");
-  const headers = baseHeaders(origin);
-
-  if (request.method === "OPTIONS") {
-    return new Response("", { status: 200, headers });
-  }
-  if (request.method !== "POST") {
-    return new Response(JSON.stringify({ ok:false }), { status: 405, headers });
-  }
-
+export async function onRequestPost({ request, env }) {
+  let body;
   try {
-    const { keyword } = await request.json();
-    const q = norm(keyword);
-    if (!q) return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
-
-    let hit = null;
-    for (const [key, value] of Object.entries(PDF_MAP)) {
-      if (norm(key) === q) { hit = value; break; }
-      const aliases = Array.isArray(value.aliases) ? value.aliases : [];
-      if (aliases.some(a => norm(a) === q)) { hit = value; break; }
-    }
-
-    if (!hit || !hit.url) {
-      return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
-    }
-
-    return new Response(JSON.stringify({ ok:true, data:{ title: hit.title, url: hit.url } }), {
-      status: 200,
-      headers: { ...headers, "Content-Type": "application/json" }
+    body = await request.json();
+  } catch {
+    return new Response(JSON.stringify({ ok: false, error: "Invalid JSON" }), {
+      status: 400,
+      headers: { "content-type": "application/json; charset=utf-8" },
     });
-  } catch (e) {
-    return new Response(JSON.stringify({ ok:false }), { status: 200, headers });
   }
+
+  const keywordRaw = (body.keyword ?? "").toString().trim();
+  if (!keywordRaw) {
+    return new Response(JSON.stringify({ ok: false, error: "keyword is required" }), {
+      status: 400,
+      headers: { "content-type": "application/json; charset=utf-8" },
+    });
+  }
+
+  // Pages の静的ファイル（/PDF_MAP.json）を Functions から読む
+  // ※ PDF_MAP.json はリポジトリ直下に置いてください（今アップしてる場所でOK）
+  const mapResp = await env.ASSETS.fetch(new Request(new URL("/PDF_MAP.json", request.url)));
+  if (!mapResp.ok) {
+    return new Response(JSON.stringify({ ok: false, error: "PDF_MAP.json not found" }), {
+      status: 500,
+      headers: { "content-type": "application/json; charset=utf-8" },
+    });
+  }
+  const PDF_MAP = await mapResp.json();
+
+  // 正規化（全角空白も潰す・大小は必要ならここで）
+  const keyword = keywordRaw.replace(/[\u3000\s]+/g, " ").trim();
+
+  const hit = PDF_MAP[keyword];
+  if (!hit) {
+    return new Response(JSON.stringify({ ok: false, error: "not found" }), {
+      status: 404,
+      headers: { "content-type": "application/json; charset=utf-8" },
+    });
+  }
+
+  // hit には { title, file } みたいなのが入ってる想定
+  const file = hit.file ?? hit.filename ?? hit.path;
+  if (!file) {
+    return new Response(JSON.stringify({ ok: false, error: "map item missing file" }), {
+      status: 500,
+      headers: { "content-type": "application/json; charset=utf-8" },
+    });
+  }
+
+  // PDF はあなたの /pdfs/ ルート（= functions/pdfs/[[path]].js）で配る
+  const url = `/pdfs/${encodeURIComponent(file)}`;
+
+  return new Response(JSON.stringify({ ok: true, title: hit.title ?? file, url }), {
+    headers: { "content-type": "application/json; charset=utf-8" },
+  });
 }
 
