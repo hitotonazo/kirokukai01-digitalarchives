@@ -76,6 +76,9 @@ body::before{
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   background-size: 260px 260px;
+  background-position: 0 0;
+  animation: noisePulse 7.2s steps(1,end) infinite;
+  will-change: opacity, transform, background-position;
 }
 
 body::after{
@@ -93,6 +96,20 @@ body::after{
   background-size: cover;
   filter: blur(.2px);
 }
+
+@keyframes noisePulse{
+  0%, 78%, 100% { opacity: .10; transform: translate3d(0,0,0); background-position: 0 0; }
+  79% { opacity: .14; transform: translate3d(-1px, 0, 0); background-position: 12px -8px; }
+  80% { opacity: .22; transform: translate3d( 1px,-1px, 0); background-position: -18px 14px; }
+  81% { opacity: .12; transform: translate3d( 0, 1px, 0); background-position: 6px 22px; }
+  82% { opacity: .18; transform: translate3d(-1px,-1px, 0); background-position: -10px -16px; }
+  83% { opacity: .11; transform: translate3d( 0, 0, 0); background-position: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  body::before{ animation: none; }
+}
+
 
 /* Ensure main UI sits above overlays */
 .site-header, .container, .site-footer{
@@ -480,22 +497,23 @@ body::after{
    Hidden link (keep functional discoverability, invisible)
 --------------------------------------------------------- */
 .hidden-url{
-  /* Hidden entry hotspot: directly under the search field */
-  position: relative;
-  margin-top: .55rem;
-  width: 100%;
-  height: 14px;
-  opacity: 0.028;
-  z-index: 6;
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  width: 140px !important;
+  height: 44px !important;
+  /* still hidden, but not "impossible" to find */
+  opacity: 0.03 !important;
+  z-index: 999 !important;
+  border-radius: 10px;
 }
 .hidden-url a{
-  display:block;
-  width:100%;
-  height:100%;
-  text-indent:-9999px;
-  overflow:hidden;
-  border-radius: 6px;
-  background: linear-gradient(90deg, rgba(255,42,63,0.18), rgba(255,42,63,0));
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  position: relative;
+  color: rgba(255,255,255,0.18) !important;
+  text-decoration: none !important;
 }
 
 /* tiny cue (very faint) */
@@ -578,7 +596,7 @@ body::after{
 
 .site-logo{
   /* logo was too large; keep it closer to the original text size */
-  height: clamp(32px, 3.2vw, 44px);
+  height: clamp(16px, 1.6vw, 22px);
   width: auto;
   display: inline-block;
   vertical-align: middle;
@@ -742,6 +760,3 @@ body::after{
   color: rgba(232,227,216,.55);
   font-size: .82rem;
 }
-
-/* Force: no gridlines */
-html, body{ background-image: none !important; }
