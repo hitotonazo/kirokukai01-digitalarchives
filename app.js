@@ -166,9 +166,9 @@ form.addEventListener("submit", async (e) => {
     const json = await resp.json().catch(() => ({}));
     if (statusEl) statusEl.textContent = "";
 
-    // 検索中表示を最低 2 秒は出す（応答が速い場合でも）
+    // 検索中表示を最低 1.5 秒は出す（応答が速い場合でも）
     const elapsed = performance.now() - startedAt;
-    if (elapsed < 2000) await sleep(2000 - elapsed);
+    if (elapsed < 1500) await sleep(1500 - elapsed);
 
     if (json && json.ok && json.data && json.data.url) {
       renderLink(json.data.title, json.data.url);   // ← ヒット時のみURLがサーバから返る
@@ -182,7 +182,7 @@ form.addEventListener("submit", async (e) => {
     if (statusEl) statusEl.textContent = "";
     // 応答エラーでも 1.5 秒は演出を見せる
     const elapsed = performance.now() - startedAt;
-    if (elapsed < 2000) await sleep(2000 - elapsed);
+    if (elapsed < 1500) await sleep(1500 - elapsed);
     renderNotFound();
     flashRedacted();
     console.error("検索処理でエラー:", err);
