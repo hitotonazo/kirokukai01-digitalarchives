@@ -72,9 +72,9 @@ body::before{
   z-index: 0;
   opacity: .16;
   mix-blend-mode: overlay;
+  /* keep only grain (avoid visible vertical/horizontal lines) */
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(180deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,.18) 3px);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   background-size: 260px 260px;
 }
 
@@ -480,18 +480,40 @@ body::after{
    Hidden link (keep functional discoverability, invisible)
 --------------------------------------------------------- */
 .hidden-url{
-  position: fixed !important;
-  right: 10px !important;
-  bottom: 10px !important;
-  width: 44px !important;
-  height: 22px !important;
-  opacity: 0.001 !important;
-  z-index: 50 !important;
+  /* Hidden entry hotspot: directly under the search field */
+  position: relative;
+  margin-top: .55rem;
+  width: 100%;
+  height: 14px;
+  opacity: 0.028;
+  z-index: 6;
 }
 .hidden-url a{
-  display:block !important;
-  width:100% !important;
-  height:100% !important;
+  display:block;
+  width:100%;
+  height:100%;
+  text-indent:-9999px;
+  overflow:hidden;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,42,63,0.18), rgba(255,42,63,0));
+}
+
+/* tiny cue (very faint) */
+.hidden-url a::after{
+  content:"LINK";
+  position:absolute;
+  right: 12px;
+  bottom: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .22;
+}
+
+.hidden-url a:focus-visible{
+  outline: 2px solid rgba(255,42,63,.65);
+  outline-offset: 3px;
 }
 
 /* ---------------------------------------------------------
@@ -555,7 +577,8 @@ body::after{
 }
 
 .site-logo{
-  height: clamp(22px, 2.2vw, 30px);
+  /* logo was too large; keep it closer to the original text size */
+  height: clamp(32px, 3.2vw, 44px);
   width: auto;
   display: inline-block;
   vertical-align: middle;
@@ -719,3 +742,6 @@ body::after{
   color: rgba(232,227,216,.55);
   font-size: .82rem;
 }
+
+/* Force: no gridlines */
+html, body{ background-image: none !important; }
