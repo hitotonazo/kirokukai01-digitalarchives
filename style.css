@@ -102,7 +102,7 @@ body{
   background: rgba(209,26,42,.12);
 }
 
-.site-header::after{
+.header-top::after{
   content: "ARCHIVE TERMINAL  //  CLASSIFICATION: RESTRICTED  //  ACCESS LOGGED";
   display:block;
   margin-top:.35rem;
@@ -456,7 +456,7 @@ body{
     top: 18px;
     bottom: 14px;
   }
-  .site-header::after{
+  .header-top::after{
     letter-spacing: .08em;
   }
 }
