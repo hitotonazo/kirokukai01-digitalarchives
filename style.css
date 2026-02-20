@@ -55,13 +55,13 @@ body{
   position: relative;
   overflow-x: hidden;
 
-  /* deep terminal background + subtle grid + scan noise */
+  /* deep terminal background + haze */
   background:
     radial-gradient(1200px 700px at 25% 10%, rgba(138,166,200,.10), transparent 60%),
     radial-gradient(900px 520px at 80% 15%, rgba(209,26,42,.08), transparent 55%),
     radial-gradient(1200px 820px at 55% 90%, rgba(138,166,200,.07), transparent 60%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 2px, transparent 6px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0px, rgba(255,255,255,.018) 1px, transparent 2px, transparent 10px),
+    radial-gradient(1px 1px at 20% 30%, rgba(232,227,216,.10), transparent 40%),
+    radial-gradient(1px 1px at 70% 60%, rgba(138,166,200,.12), transparent 45%),
     linear-gradient(180deg, var(--bg-1), var(--bg-0) 65%);
 }
 
@@ -164,7 +164,7 @@ body::after{
   pointer-events: none;
   background:
     radial-gradient(1200px 600px at 30% 20%, rgba(209,26,42,.18), transparent 60%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0px, rgba(255,255,255,.06) 1px, transparent 2px, transparent 6px);
+    radial-gradient(800px 520px at 55% 55%, rgba(255,255,255,.06), transparent 70%);
   mix-blend-mode: screen;
   opacity: 0;
 }
@@ -219,14 +219,16 @@ body::after{
   font-size: 12px;
 }
 .site-footer small{
-  font-size: 11px;
+  font-size: 8px;
+  line-height: 1.2;
   letter-spacing: .06em;
   opacity: .9;
 }
 .disclaimer{
+  line-height: 1.35;
   margin: .5rem auto 0;
   max-width: min(960px, 92vw);
-  font-size: 11px;
+  font-size: 8px;
   color: rgba(232,227,216,.6);
 }
 
@@ -382,7 +384,9 @@ body::after{
   z-index: 0;
   inset: 0;
   background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 2px, transparent 10px);
+    radial-gradient(1px 1px at 22% 28%, rgba(255,255,255,.10), transparent 55%),
+    radial-gradient(1px 1px at 68% 62%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(900px 520px at 50% 50%, rgba(138,166,200,.06), transparent 70%);
   opacity: .35;
   pointer-events:none;
 }
