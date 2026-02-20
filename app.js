@@ -9,6 +9,7 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 const loadingSub = document.getElementById("loadingSub");
 const loadingLog = document.getElementById("loadingLog");
 const loadingBar = document.getElementById("loadingBar");
+const redactedFlash = document.getElementById("redactedFlash");
 
 let loadingTimer = null;
 let loadingStep = 0;
@@ -70,6 +71,25 @@ function hideLoading(){
   if (loadingBar) loadingBar.style.width = "100%";
 }
 
+function sleep(ms){
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function flashRedacted(){
+  if (!redactedFlash) return;
+  redactedFlash.classList.remove("hidden");
+  redactedFlash.setAttribute("aria-hidden", "false");
+  // restart animation
+  redactedFlash.classList.remove("is-active");
+  void redactedFlash.offsetWidth; // force reflow
+  redactedFlash.classList.add("is-active");
+  setTimeout(() => {
+    redactedFlash.classList.add("hidden");
+    redactedFlash.setAttribute("aria-hidden", "true");
+    redactedFlash.classList.remove("is-active");
+  }, 1000);
+}
+
 
 // 安全策：残骸の削除（任意）
 try { window?.localStorage?.removeItem("keyword"); } catch {}
@@ -78,8 +98,7 @@ function clearResults() {
   resultsEl.innerHTML = "";
   if (notFoundEl) notFoundEl.classList.add("hidden"); // ヒット表示時は必ず隠す
   if (statusEl) statusEl.textContent = "";
-    hideLoading();
-    hideLoading();
+  hideLoading();
 }
 
 function renderNotFound() {
@@ -136,6 +155,7 @@ form.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   if (statusEl) statusEl.textContent = "検索中…";
   showLoading(keyword);
+  const startedAt = performance.now();
 
   try {
     const resp = await fetch("/lookup", {
@@ -146,14 +166,25 @@ form.addEventListener("submit", async (e) => {
     const json = await resp.json().catch(() => ({}));
     if (statusEl) statusEl.textContent = "";
 
+    // 検索中表示を最低 1.5 秒は出す（応答が速い場合でも）
+    const elapsed = performance.now() - startedAt;
+    if (elapsed < 1500) await sleep(1500 - elapsed);
+
     if (json && json.ok && json.data && json.data.url) {
       renderLink(json.data.title, json.data.url);   // ← ヒット時のみURLがサーバから返る
     } else {
       renderNotFound();
     }
+
+    // 結果返却後に 1 秒だけ “REDACTED” をチラつかせる（演出のみ）
+    flashRedacted();
   } catch (err) {
     if (statusEl) statusEl.textContent = "";
+    // 応答エラーでも 1.5 秒は演出を見せる
+    const elapsed = performance.now() - startedAt;
+    if (elapsed < 1500) await sleep(1500 - elapsed);
     renderNotFound();
+    flashRedacted();
     console.error("検索処理でエラー:", err);
   } finally {
     hideLoading();
