@@ -5,6 +5,71 @@ const resultsEl = document.getElementById("results");
 const submitBtn = document.getElementById("submitBtn");
 const statusEl = document.getElementById("status");
 const notFoundEl = document.getElementById("notFound");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const loadingSub = document.getElementById("loadingSub");
+const loadingLog = document.getElementById("loadingLog");
+const loadingBar = document.getElementById("loadingBar");
+
+let loadingTimer = null;
+let loadingStep = 0;
+
+function showLoading(keyword){
+  if (!loadingOverlay) return;
+  loadingStep = 0;
+  loadingOverlay.classList.remove("hidden");
+  loadingOverlay.setAttribute("aria-hidden", "false");
+
+  const ts = () => new Date().toISOString().replace("T"," ").replace("Z"," UTC");
+  const lines = [
+    `[${ts()}] AUTH OK / SESSION: ${Math.random().toString(16).slice(2,10).toUpperCase()}`,
+    `[${ts()}] QUERY RECEIVED / KEYWORD: "${keyword}"`,
+    `[${ts()}] ROUTE: /lookup  METHOD: POST`,
+    `[${ts()}] CLASSIFICATION CHECK: RESTRICTED`,
+    `[${ts()}] INDEX SCAN: START`,
+  ];
+
+  if (loadingLog) loadingLog.textContent = lines.join("\n");
+  if (loadingSub) loadingSub.textContent = "ACCESS LOG: INIT";
+  if (loadingBar) loadingBar.style.width = "12%";
+
+  if (loadingTimer) clearInterval(loadingTimer);
+  loadingTimer = setInterval(() => {
+    loadingStep++;
+    const phases = [
+      "ACCESS LOG: INIT",
+      "ACCESS LOG: VERIFYING",
+      "ACCESS LOG: SCANNING INDEX",
+      "ACCESS LOG: RESOLVING POINTER",
+      "ACCESS LOG: FINALIZING",
+    ];
+    const pct = Math.min(88, 12 + loadingStep * 12);
+    if (loadingSub) loadingSub.textContent = phases[Math.min(phases.length-1, Math.floor(loadingStep/2))];
+    if (loadingBar) loadingBar.style.width = pct + "%";
+
+    if (loadingLog){
+      const extra = [
+        "… checksum ok",
+        "… signature verified",
+        "… decryption skipped (link-only mode)",
+        "… access logged",
+        "… record pointer ready",
+      ];
+      const ts2 = ts();
+      const add = `[${ts2}] ${extra[Math.min(extra.length-1, loadingStep % extra.length)]}`;
+      loadingLog.textContent = (loadingLog.textContent + "\n" + add).split("\n").slice(-10).join("\n");
+    }
+  }, 520);
+}
+
+function hideLoading(){
+  if (!loadingOverlay) return;
+  loadingOverlay.classList.add("hidden");
+  loadingOverlay.setAttribute("aria-hidden", "true");
+  if (loadingTimer) clearInterval(loadingTimer);
+  loadingTimer = null;
+  if (loadingBar) loadingBar.style.width = "100%";
+}
+
 
 // 安全策：残骸の削除（任意）
 try { window?.localStorage?.removeItem("keyword"); } catch {}
@@ -13,6 +78,8 @@ function clearResults() {
   resultsEl.innerHTML = "";
   if (notFoundEl) notFoundEl.classList.add("hidden"); // ヒット表示時は必ず隠す
   if (statusEl) statusEl.textContent = "";
+    hideLoading();
+    hideLoading();
 }
 
 function renderNotFound() {
@@ -68,6 +135,7 @@ form.addEventListener("submit", async (e) => {
   resultsEl.setAttribute("aria-busy", "true");
   submitBtn.disabled = true;
   if (statusEl) statusEl.textContent = "検索中…";
+  showLoading(keyword);
 
   try {
     const resp = await fetch("/lookup", {
@@ -88,6 +156,7 @@ form.addEventListener("submit", async (e) => {
     renderNotFound();
     console.error("検索処理でエラー:", err);
   } finally {
+    hideLoading();
     resultsEl.setAttribute("aria-busy", "false");
     submitBtn.disabled = false;
   }

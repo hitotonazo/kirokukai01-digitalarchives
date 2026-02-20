@@ -11,8 +11,32 @@
   <!-- UI フラグ（用途不明） -->
   <div id="ux-flag" class="ux-flag" aria-hidden="true"></div>
 
+  <!-- 検索中ギミック（表示のみ／機能は変更しない） -->
+  <div id="loadingOverlay" class="loading-overlay hidden" aria-hidden="true">
+    <div class="loading-panel" role="status" aria-live="polite" aria-label="照合中">
+      <div class="loading-head">
+        <span class="loading-dot" aria-hidden="true"></span>
+        <span class="loading-title">照合中</span>
+        <span class="loading-sub mono" id="loadingSub">ACCESS LOG: INIT</span>
+      </div>
+      <div class="loading-bar" aria-hidden="true"><span class="loading-bar__fill" id="loadingBar"></span></div>
+      <div class="loading-log mono" id="loadingLog" aria-hidden="true"></div>
+      <div class="loading-note">※照合には数秒かかる場合があります</div>
+    </div>
+  </div>
+
+
   <header class="site-header">
-    <h1>奇録会【霧籠村祭事報告書】デジタルアーカイブ</h1>
+    <div class="header-top">
+      <div class="stamp" aria-hidden="true">RESTRICTED</div>
+      <h1 class="site-title">
+        <span class="site-title__org">奇録会</span>
+        <span class="site-title__sep">／</span>
+        <span class="site-title__case">霧籠村祭事報告書</span>
+        <span class="site-title__sys">資料閲覧端末</span>
+      </h1>
+      <p class="tagline mono">ARCHIVE TERMINAL // CLASSIFICATION: RESTRICTED // ACCESS LOGGED</p>
+    </div>
   </header>
 
   <main class="container">
