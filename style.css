@@ -7,25 +7,25 @@
 
 :root{
   /* base */
-  --bg-0: #e7eaee;
-  --bg-1: #f4f6f8;
-  --fg:   #1b1f24;
-  --muted:#5a6676;
+  --bg-0: #1f2328;
+  --bg-1: #2b2f35;
+  --fg:   #e6e8ea;
+  --muted:#aeb4ba;
 
   /* surfaces */
-  --panel: #f7f8fa;
-  --paper: #e9e2d4;
-  --paper-2:#ded6c6;
+  --panel: #2a2f36;
+  --paper: #2a2f36;
+  --paper-2:#23272d;
 
   /* lines & accents */
-  --border: rgba(20, 24, 28, .10);
-  --border-strong: rgba(20, 24, 28, .16);
+  --border: rgba(255,255,255,.08);
+  --border-strong: rgba(255,255,255,.14);
   --danger:#ff2a3f; /* “RESTRICTED” red */
   --accent:#7f9fcb; /* subtle digital accent */
 
   /* shadow */
-  --shadow: 0 18px 48px rgba(0,0,0,.18);
-  --shadow-soft: 0 10px 24px rgba(0,0,0,.12);
+  --shadow: 0 18px 48px rgba(0,0,0,.55);
+  --shadow-soft: 0 10px 24px rgba(0,0,0,.45);
 
   /* radius */
   --r-lg: 18px;
@@ -55,13 +55,11 @@ body{
   position: relative;
   overflow-x: hidden;
 
-  /* deep terminal background + haze */
   background:
-    
-    radial-gradient(1200px 700px at 25% 10%, rgba(209,26,42,.06), transparent 62%),
+    radial-gradient(1200px 700px at 25% 10%, rgba(255,255,255,.06), transparent 62%),
     radial-gradient(900px 520px at 80% 15%, rgba(127,159,203,.08), transparent 60%),
     radial-gradient(1200px 820px at 55% 90%, rgba(127,159,203,.06), transparent 62%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-0) 70%);
+    linear-gradient(180deg, #2b2f35, #24282e 60%, #1f2328);
 }
 
 /* gritty “dark site” overlays (noise + vignette + faint network lines) */
@@ -247,7 +245,7 @@ body::after{
   border-radius: var(--r-lg);
   border: 1px solid var(--border-strong);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.85), rgba(240,242,245,.65));
+    linear-gradient(180deg, rgba(64,69,75,.92), rgba(52,57,63,.94));
   box-shadow: var(--shadow-soft);
   overflow: hidden;
 }
@@ -287,13 +285,13 @@ body::after{
   padding: .88rem .95rem;
   border-radius: var(--r-md);
   border: 1px solid var(--border-strong);
-  background: linear-gradient(180deg, rgba(18,24,34,.96), rgba(18,24,34,.78));
+  background: linear-gradient(180deg, #2a2f36, #23272d);
   color: rgba(255,255,255,.92);
   font-size: 1rem;
   outline: none;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.05),
-    0 0 0 1px rgba(0,0,0,.22);
+    0 0 0 1px rgba(0,0,0,.42);
 }
 
 .input::placeholder{
@@ -360,7 +358,7 @@ body::after{
   border-radius: var(--r-lg);
   border: 1px solid var(--border-strong);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.86), rgba(242,244,247,.66));
+    linear-gradient(180deg, rgba(64,69,75,.92), rgba(52,57,63,.94));
   box-shadow: var(--shadow-soft);
   overflow:hidden;
 }
@@ -580,7 +578,7 @@ body::after{
 
 .site-logo{
   /* logo was too large; keep it closer to the original text size */
-  height: clamp(32px, 3.2vw, 44px);
+  height: clamp(56px, 5vw, 72px);
   width: auto;
   display: inline-block;
   vertical-align: middle;
