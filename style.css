@@ -77,7 +77,7 @@ body::before{
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   background-size: 260px 260px;
   background-position: 0 0;
-  animation: noisePulse 7.2s steps(1,end) infinite;
+  animation: noisePulse 30s steps(1,end) infinite;
   will-change: opacity, transform, background-position;
 }
 
