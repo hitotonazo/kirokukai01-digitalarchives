@@ -192,3 +192,22 @@ form.addEventListener("submit", async (e) => {
     submitBtn.disabled = false;
   }
 });
+
+// ===============================
+// Screen noise every 30 seconds
+// ===============================
+const noiseLayer = document.getElementById("screen-noise");
+
+function triggerNoise() {
+  if (!noiseLayer) return;
+  noiseLayer.classList.remove("is-active");
+  // 強制リフローでアニメーションを再トリガー
+  void noiseLayer.offsetWidth;
+  noiseLayer.classList.add("is-active");
+}
+
+// 30秒ごとに実行
+setInterval(triggerNoise, 30000);
+
+// テスト用：最初に1回だけ鳴らしたい場合はこれも有効
+// setTimeout(triggerNoise, 3000);
