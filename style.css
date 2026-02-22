@@ -763,12 +763,12 @@ html, body{ background-image: none !important; }
 }
 
 #screen-noise.is-active {
-  animation: noiseFlash 0.6s steps(2, end);
+  animation: noiseFlash 0.6s steps(6, end);
 }
 
 @keyframes noiseFlash {
   0%   { opacity: 0; }
-  10%  { opacity: 0.85; }
+  10%  { opacity: 1.5; }
   40%  { opacity: 0.4; }
   70%  { opacity: 0.9; }
   100% { opacity: 0; }
