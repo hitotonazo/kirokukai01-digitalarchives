@@ -56,10 +56,10 @@ body{
   overflow-x: hidden;
 
   background:
-    radial-gradient(1200px 700px at 25% 10%, rgba(255,255,255,.06), transparent 62%),
-    radial-gradient(900px 520px at 80% 15%, rgba(127,159,203,.08), transparent 60%),
-    radial-gradient(1200px 820px at 55% 90%, rgba(127,159,203,.06), transparent 62%),
-    linear-gradient(180deg, #2b2f35, #24282e 60%, #1f2328);
+    radial-gradient(1200px 700px at 25% 10%, rgba(127,159,203,.07), transparent 62%),
+    radial-gradient(900px 520px at 80% 15%, rgba(255,42,63,.05), transparent 60%),
+    radial-gradient(1200px 820px at 55% 90%, rgba(127,159,203,.05), transparent 62%),
+    linear-gradient(180deg, #070c14, #05070b 60%, #1f2328);
 }
 
 /* gritty “dark site” overlays (noise + vignette + faint network lines) */
