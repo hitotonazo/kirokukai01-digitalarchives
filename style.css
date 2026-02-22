@@ -7,15 +7,15 @@
 
 :root{
   /* base */
-  --bg-0: #1f2328;
-  --bg-1: #2b2f35;
-  --fg:   #e6e8ea;
-  --muted:#aeb4ba;
+  --bg-0: #05070b;
+  --bg-1: #070c14;
+  --fg:   #d7d2c7;
+  --muted:#95a0b0;
 
   /* surfaces */
-  --panel: #2a2f36;
-  --paper: #2a2f36;
-  --paper-2:#23272d;
+  --panel: #0b1220;
+  --paper: #e9e2d4;
+  --paper-2:#ded6c6;
 
   /* lines & accents */
   --border: rgba(255,255,255,.08);
