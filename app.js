@@ -193,21 +193,47 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+
+
 // ===============================
-// Screen noise every 30 seconds
+// Strong glitch every 30 seconds
 // ===============================
 const noiseLayer = document.getElementById("screen-noise");
 
-function triggerNoise() {
-  if (!noiseLayer) return;
-  noiseLayer.classList.remove("is-active");
-  // 強制リフローでアニメーションを再トリガー
-  void noiseLayer.offsetWidth;
-  noiseLayer.classList.add("is-active");
+function triggerGlitch() {
+  // ランダムなズレ量（強め）
+  const gx = (Math.random() * 8 - 4).toFixed(0) + "px"; // -4〜+4px
+  const gy = (Math.random() * 8 - 4).toFixed(0) + "px";
+  const rx = (Math.random() * 6 + 2).toFixed(0) + "px"; // 2〜8px
+  const bx = (Math.random() * 6 + 2).toFixed(0) + "px";
+
+  // CSS変数で揺れ/文字ズレを注入
+  document.body.style.setProperty("--gx", gx);
+  document.body.style.setProperty("--gy", gy);
+  document.body.style.setProperty("--rx", rx);
+  document.body.style.setProperty("--bx", "-" + bx);
+
+  // ノイズ再トリガー
+  if (noiseLayer) {
+    noiseLayer.classList.remove("is-active");
+    void noiseLayer.offsetWidth;
+    noiseLayer.classList.add("is-active");
+  }
+
+  // 画面揺れ＆文字ズレ
+  document.body.classList.remove("glitch-active");
+  void document.body.offsetWidth;
+  document.body.classList.add("glitch-active");
+
+  // 0.9秒後に解除（CSSアニメ長と合わせる）
+  setTimeout(() => {
+    document.body.classList.remove("glitch-active");
+    if (noiseLayer) noiseLayer.classList.remove("is-active");
+  }, 900);
 }
 
-// 30秒ごとに実行
-setInterval(triggerNoise, 30000);
+// 30秒ごと
+setInterval(triggerGlitch, 30000);
 
-// テスト用：最初に1回だけ鳴らしたい場合はこれも有効
-// setTimeout(triggerNoise, 3000);
+// 開始直後にテストしたいなら（任意）
+// setTimeout(triggerGlitch, 3000);
