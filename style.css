@@ -18,14 +18,14 @@
   --paper-2:#ded6c6;
 
   /* lines & accents */
-  --border: rgba(255,255,255,.08);
-  --border-strong: rgba(255,255,255,.14);
+  --border: rgba(215, 210, 199, .12);
+  --border-strong: rgba(215, 210, 199, .20);
   --danger:#ff2a3f; /* “RESTRICTED” red */
   --accent:#7f9fcb; /* subtle digital accent */
 
   /* shadow */
   --shadow: 0 18px 48px rgba(0,0,0,.55);
-  --shadow-soft: 0 10px 24px rgba(0,0,0,.45);
+  --shadow-soft: 0 10px 24px rgba(0,0,0,.35);
 
   /* radius */
   --r-lg: 18px;
@@ -55,11 +55,12 @@ body{
   position: relative;
   overflow-x: hidden;
 
+  /* deep terminal background + haze */
   background:
     radial-gradient(1200px 700px at 25% 10%, rgba(127,159,203,.07), transparent 62%),
     radial-gradient(900px 520px at 80% 15%, rgba(255,42,63,.05), transparent 60%),
     radial-gradient(1200px 820px at 55% 90%, rgba(127,159,203,.05), transparent 62%),
-    linear-gradient(180deg, #070c14, #05070b 60%, #1f2328);
+        linear-gradient(180deg, var(--bg-1), var(--bg-0) 65%);
 }
 
 /* gritty “dark site” overlays (noise + vignette + faint network lines) */
@@ -69,7 +70,7 @@ body::before{
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: .08;
+  opacity: .16;
   mix-blend-mode: overlay;
   /* keep only grain (avoid visible vertical/horizontal lines) */
   background-image:
@@ -83,9 +84,9 @@ body::after{
   inset: -12%;
   pointer-events: none;
   z-index: 0;
-  opacity: .22;
+  opacity: .78;
   background:
-    radial-gradient(900px 520px at 50% 20%, rgba(0,0,0,0), rgba(0,0,0,.10) 52%, rgba(0,0,0,.22) 100%),
+    radial-gradient(900px 520px at 50% 20%, rgba(0,0,0,0), rgba(0,0,0,.48) 52%, rgba(0,0,0,.84) 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Cdefs%3E%3Cpattern id='p' width='420' height='120' patternUnits='userSpaceOnUse' patternTransform='rotate(-16)'%3E%3Ctext x='0' y='70' font-family='ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' font-size='22' fill='rgba(255,42,63,0.08)' letter-spacing='2'%3EUNAUTHORIZED%20ACCESS%20LOGGED%3C/text%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23p)'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Cg fill='none' stroke='rgba(140,170,200,0.12)' stroke-width='1'%3E%3Cpath d='M120 120 L420 90 L680 170 L980 120'/%3E%3Cpath d='M200 520 L460 430 L760 520 L1040 420'/%3E%3Cpath d='M140 260 L360 320 L620 280 L900 340'/%3E%3Cpath d='M260 160 L300 380 L520 420 L760 300 L980 360'/%3E%3C/g%3E%3Cg fill='rgba(209,26,42,0.14)'%3E%3Ccircle cx='420' cy='90' r='3'/%3E%3Ccircle cx='680' cy='170' r='3'/%3E%3Ccircle cx='460' cy='430' r='3'/%3E%3Ccircle cx='760' cy='520' r='3'/%3E%3Ccircle cx='900' cy='340' r='3'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -146,7 +147,7 @@ body::after{
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: .12em;
-  color: rgba(0,0,0,.55);
+  color: rgba(232,227,216,.72);
   text-transform: uppercase;
   white-space: nowrap;
   overflow:hidden;
@@ -214,7 +215,7 @@ body::after{
   border-top: 1px solid var(--border);
   text-align:center;
   color: rgba(232,227,216,.72);
-  background: linear-gradient(180deg, rgba(17,26,38,.25), rgba(0,0,0,.06));
+  background: linear-gradient(180deg, rgba(17,26,38,.25), rgba(0,0,0,.25));
   font-size: 12px;
 }
 .site-footer small{
@@ -228,7 +229,7 @@ body::after{
   margin: .5rem auto 0;
   max-width: min(960px, 92vw);
   font-size: 8px;
-  color: rgba(0,0,0,.42);
+  color: rgba(232,227,216,.6);
 }
 
 /* ---------------------------------------------------------
@@ -245,7 +246,7 @@ body::after{
   border-radius: var(--r-lg);
   border: 1px solid var(--border-strong);
   background:
-    linear-gradient(180deg, rgba(64,69,75,.92), rgba(52,57,63,.94));
+    linear-gradient(180deg, rgba(17,26,38,.72), rgba(17,26,38,.40));
   box-shadow: var(--shadow-soft);
   overflow: hidden;
 }
@@ -285,13 +286,13 @@ body::after{
   padding: .88rem .95rem;
   border-radius: var(--r-md);
   border: 1px solid var(--border-strong);
-  background: linear-gradient(180deg, #2a2f36, #23272d);
-  color: rgba(255,255,255,.92);
+  background: linear-gradient(180deg, rgba(17,26,38,.95), rgba(17,26,38,.72));
+  color: var(--fg);
   font-size: 1rem;
   outline: none;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.05),
-    0 0 0 1px rgba(0,0,0,.42);
+    0 0 0 1px rgba(0,0,0,.22);
 }
 
 .input::placeholder{
@@ -308,7 +309,7 @@ body::after{
 /* Button */
 .btn{
   appearance:none;
-  border: 1px solid rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.25);
   border-radius: var(--r-md);
   padding: .88rem 1.15rem;
   background:
@@ -340,7 +341,7 @@ body::after{
 .hint{
   margin: .55rem 0 0;
   font-size: .85rem;
-  color: rgba(0,0,0,.55); /* on paper */
+  color: rgba(42,42,42,.68); /* on paper */
 }
 
 /* ---------------------------------------------------------
@@ -358,7 +359,7 @@ body::after{
   border-radius: var(--r-lg);
   border: 1px solid var(--border-strong);
   background:
-    linear-gradient(180deg, rgba(64,69,75,.92), rgba(52,57,63,.94));
+    linear-gradient(180deg, rgba(11,18,32,.82), rgba(11,18,32,.32));
   box-shadow: var(--shadow-soft);
   overflow:hidden;
 }
@@ -407,7 +408,7 @@ body::after{
 
 .card p{
   margin: 0 0 .8rem 0;
-  color: rgba(40,50,62,.78);
+  color: rgba(232,227,216,.68);
 }
 
 /* link button */
@@ -479,23 +480,22 @@ body::after{
    Hidden link (keep functional discoverability, invisible)
 --------------------------------------------------------- */
 .hidden-url{
-  position: fixed !important;
-  right: 10px !important;
-  bottom: 10px !important;
-  width: 140px !important;
-  height: 44px !important;
-  /* still hidden, but not "impossible" to find */
-  opacity: 0.03 !important;
-  z-index: 999 !important;
-  border-radius: 10px;
+  /* Hidden entry hotspot: directly under the search field */
+  position: relative;
+  margin-top: .55rem;
+  width: 100%;
+  height: 14px;
+  opacity: 0.028;
+  z-index: 6;
 }
 .hidden-url a{
-  display:block !important;
-  width:100% !important;
-  height:100% !important;
-  position: relative;
-  color: rgba(255,255,255,0.18) !important;
-  text-decoration: none !important;
+  display:block;
+  width:100%;
+  height:100%;
+  text-indent:-9999px;
+  overflow:hidden;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,42,63,0.18), rgba(255,42,63,0));
 }
 
 /* tiny cue (very faint) */
@@ -578,7 +578,7 @@ body::after{
 
 .site-logo{
   /* logo was too large; keep it closer to the original text size */
-  height: clamp(56px, 5vw, 72px);
+  height: clamp(32px, 3.2vw, 44px);
   width: auto;
   display: inline-block;
   vertical-align: middle;
@@ -742,3 +742,6 @@ body::after{
   color: rgba(232,227,216,.55);
   font-size: .82rem;
 }
+
+/* Force: no gridlines */
+html, body{ background-image: none !important; }
